@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MaoApplication<mao>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.mao.mao.MaoApplication",
+            "projectName": "mao",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
