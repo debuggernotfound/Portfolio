@@ -1,30 +1,26 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { getHelloMessage } from './apiService';
+import Home from "./pages/home";
+import Game from "./pages/game";
+import End from "./pages/end";
 
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getHelloMessage();
-        setMessage(data);
-      } catch (error) {
-        console.error('Error fetching message', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>{message}</h1>
-      </header>
-    </div>
+    <>
+
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/game" element={<Game />}/>
+        <Route path="/end" element={<End />}/>
+      </Routes>
+    </Router>
+
+    </>
+
   );
 }
 

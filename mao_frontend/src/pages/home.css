@@ -1,0 +1,26 @@
+.Page {
+    background-color: green;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;     
+    height: 100vh;
+}
+.Title{
+    font-size: 40pt;
+    font-family:cursive;
+}
+.Play{
+    background-color: #3f7221;
+    border: black;
+    color: #ffffff;
+    padding: 10px;
+    font-size: 16px;
+    width: 100px;
+    cursor:pointer;
+    font-family:'Comfortaa', cursive;
+}
+.Play:hover{
+    background-color: gray;
+}
