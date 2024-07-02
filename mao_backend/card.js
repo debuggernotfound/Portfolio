@@ -9,4 +9,8 @@ class Card{
     getValue(){
         return this.value;
     }
+    toString(){
+        return this.value + " of " + this.suit;
+    }
 }
+export default Card;

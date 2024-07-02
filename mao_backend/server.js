@@ -7,7 +7,6 @@ app.use(express.json);
 
 const port = 3001;
 
-app.get("/message")
 server.listen(port, () => {
     console.log(`Node.js HTTP server is running on port ${port}`)
 });
