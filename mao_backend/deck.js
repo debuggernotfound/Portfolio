@@ -4,7 +4,7 @@ class Deck{
     constructor(numberOfDecks){
         const suits = ["Clubs", "Spades", "Diamonds", "Hearts"];
         const values = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"]
-
+        this.currentDrawPosition = 0; 
         this.numCards = 52*numberOfDecks
         this.cards = new Array(this.numCards);
         for(let i = 0; i < numberOfDecks; i++){
@@ -16,6 +16,7 @@ class Deck{
             
         }
     }
+
     shuffle(){
         for(let i = this.numCards - 1; i > 0; i--){
             let chosen = Math.floor(Math.random()*(i-1));
@@ -23,11 +24,52 @@ class Deck{
             this.cards[i] = this.cards[chosen];
             this.cards[chosen] = temp;
         }
-        for(let i = 0; i < this.numCards; i++){
-            console.log(this.cards[i].toString());
+    }
+
+    draw(numberToDraw){
+        let toReturn;
+        let remainingCards = this.numCards - this.currentDrawPosition;
+        if(numberToDraw > remainingCards){
+            toReturn = new Array(this.numCards - this.currentDrawPosition);
+            for(let i = this.currentDrawPosition; i < this.numCards; i++){
+                toReturn[i - this.currentDrawPosition] = this.cards[i];
+            }
+            numberToDraw = numberToDraw - remainingCards;
+            let wholeDecks = Math.floor(numberToDraw/this.numCards);
+            for(let i = 0; i < wholeDecks ; i++){
+                this.shuffle();
+                toReturn = toReturn.concat(this.cards);
+            }
+            numberToDraw = numberToDraw % this.numCards; 
+            this.shuffle();
+            let tempArr = new Array(numberToDraw);
+            for(let i = 0; i < numberToDraw; i++){
+                tempArr[i] = this.cards[i];
+            }
+            toReturn = toReturn.concat(tempArr);
+            this.currentDrawPosition = numberToDraw;
         }
+        else{
+            toReturn = new Array(numberToDraw);
+            for(let i = this.currentDrawPosition; i < numberToDraw + this.currentDrawPosition; i++){
+                toReturn[i - this.currentDrawPosition] = this.cards[i];
+            }
+            this.currentDrawPosition = numberToDraw + this.currentDrawPosition;
+        }
+        for(let i = 0; i < toReturn.length; i++){
+            console.log(toReturn[i]);
+        }
+        return toReturn;
     }
 }
-let d1 = new Deck(1);
-d1.shuffle();
+let deck = new Deck(1);
+deck.shuffle();
+deck.draw(12);
+console.log("-----------");
+deck.draw(126);
+console.log("------------")
+let deck2 = new Deck(2);
+deck2.shuffle()
+deck2.draw(120);
+
 export default Deck;
