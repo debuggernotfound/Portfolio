@@ -10,7 +10,7 @@ class Card{
         return this.value;
     }
     toString(){
-        return this.value + " of " + this.suit;
+        return this.value.toLowerCase() + "_of_" + this.suit.toLowerCase();
     }
 }
 export default Card;

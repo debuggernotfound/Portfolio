@@ -7,10 +7,11 @@ import Home from "./pages/home";
 import Game from "./pages/game";
 import End from "./pages/end";
 
+
 function App() {
+
   return (
     <>
-
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />

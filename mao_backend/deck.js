@@ -1,7 +1,7 @@
 import Card from './card.js';
 
 class Deck{
-    constructor(numberOfDecks){
+    constructor(numberOfDecks, shuffledOrNot){
         const suits = ["Clubs", "Spades", "Diamonds", "Hearts"];
         const values = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"]
         this.currentDrawPosition = 0; 
@@ -12,8 +12,10 @@ class Deck{
                 for(let k = 0; k < 4; k++){
                     this.cards[i*52 + j*4 + k] = new Card(suits[k], values[j]);
                 }
-            }
-            
+            } 
+        }
+        if(shuffledOrNot){
+            this.shuffle();
         }
     }
 
@@ -25,7 +27,6 @@ class Deck{
             this.cards[chosen] = temp;
         }
     }
-
     draw(numberToDraw){
         let toReturn;
         let remainingCards = this.numCards - this.currentDrawPosition;
@@ -56,20 +57,7 @@ class Deck{
             }
             this.currentDrawPosition = numberToDraw + this.currentDrawPosition;
         }
-        for(let i = 0; i < toReturn.length; i++){
-            console.log(toReturn[i]);
-        }
         return toReturn;
     }
 }
-let deck = new Deck(1);
-deck.shuffle();
-deck.draw(12);
-console.log("-----------");
-deck.draw(126);
-console.log("------------")
-let deck2 = new Deck(2);
-deck2.shuffle()
-deck2.draw(120);
-
 export default Deck;

@@ -1,0 +1,50 @@
+@mixin fan($count, $angle) {
+  @for $i from 1 through $count {
+    div:nth-child(#{$i}) {
+      transform: translate(-50%, -50%) rotate(-$angle / 2 + $angle / ($count + 1) * $i);
+    }
+  }
+}
+@mixin flexCenter(){
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.hand { 
+  position: relative;
+  height:100vh;
+  width: 100vh; 
+  justify-self: center;
+  @include flexCenter();
+  margin-bottom: 20px;
+  // @include fan(--num-card, 50deg);
+  // &:hover {
+  //   @include fan(--num-card, 60deg);
+  // }
+  background-color: red;
+}
+@import "./Card";
+// .hand {
+//   position: absolute;
+//   height: 100%;
+//   width: 100%;
+//   @for $i from 1 through 5 {
+//     div:nth-child(#{$i}) {
+//       transform: translate(-50%, -50%) rotate(10deg * $i);
+//     }
+//   }
+  
+//   background-color: #ff0000;  
+//   bottom: 20px; /* Adjust as needed to position the hand at the bottom */
+//   height: 150px;
+//   width: 100%;
+//   display:flex;
+//   flex-direction: row;
+//   align-content: center;
+//   align-items: center;
+//   justify-content: center;
+//   border: 1px solid #ccc;
+//   border-radius: 10px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow for better visibility */
+// }
