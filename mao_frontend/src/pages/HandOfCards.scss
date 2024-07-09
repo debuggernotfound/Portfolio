@@ -1,10 +1,3 @@
-@mixin fan($count, $angle) {
-  @for $i from 1 through $count {
-    div:nth-child(#{$i}) {
-      transform: translate(-50%, -50%) rotate(-$angle / 2 + $angle / ($count + 1) * $i);
-    }
-  }
-}
 @mixin flexCenter(){
   display:flex;
   flex-direction: row;
@@ -12,16 +5,12 @@
   align-items: center;
 }
 .hand { 
-  position: relative;
-  height:100vh;
-  width: 100vh; 
+  display: flex;
+  height:300px;
+  width:100%; 
+  bottom: 500px;
   justify-self: center;
-  @include flexCenter();
-  margin-bottom: 20px;
-  // @include fan(--num-card, 50deg);
-  // &:hover {
-  //   @include fan(--num-card, 60deg);
-  // }
+  align-items:center;
   background-color: red;
 }
 @import "./Card";
