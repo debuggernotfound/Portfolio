@@ -4,13 +4,13 @@
   justify-content: center;
   align-items: center;
 }
-.hand { 
+.hand{ 
   display: flex;
   height:300px;
   width:100%; 
   bottom: 500px;
-  justify-self: center;
-  align-items:center;
+  justify-content: center;
+  align-items: center;
   background-color: red;
 }
 @import "./Card";

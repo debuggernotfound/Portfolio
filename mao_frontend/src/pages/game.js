@@ -2,7 +2,7 @@ import React from 'react';
 import './home.css';
 import {useNavigate} from 'react-router-dom';
 import Hand from "./HandOfCards.js";
-import Card from "./Card.js";
+import Card from "./Card.tsx";
 //import {motion} from "framer-motion";
 
 function Game(){
