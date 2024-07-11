@@ -3,8 +3,8 @@ import './home.css';
 import {useNavigate} from 'react-router-dom';
 import Hand from "./HandOfCards.js";
 import Card from "./Card.tsx";
+import ReactDOM from "react-dom/client";
 //import {motion} from "framer-motion";
-
 function Game(){
     let navigate = useNavigate();
     let machineHand = ["three_of_clubs", "three_of_spades", "quuen_of_hearts"];
@@ -13,17 +13,7 @@ function Game(){
         playerHand.push("ace_of_spades");
         machineHand.push("ace_of_spades");
     }
-    let playerHandObject = new Hand(playerHand, false);
-    let machineHandObject = new Hand(machineHand, true);
-    return(
-        <div>
-            <div>
-                {machineHandObject.render()}
-            </div>
-            <div>
-                {playerHandObject.render()}
-            </div>
-        </div>
-    );
+    return(<div>{Hand(machineHand, true)}{Hand(playerHand, false)}</div>);
 }
+
 export default Game;

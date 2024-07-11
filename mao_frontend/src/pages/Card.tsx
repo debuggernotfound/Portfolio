@@ -2,7 +2,7 @@ import React from 'react';
 import './Card.scss';
 import {motion, LayoutGroup, useDragControls, animate, Variants} from 'framer-motion';
 
-function Card(imagePathway, isFlippedOver, givenStyle, degreeRotation){
+function Card(index, imagePathway, isFlippedOver, givenStyle, degreeRotation){
   // imagePathway: String;
   // isFlippedOver: boolean;
   //   constructor(){
@@ -29,7 +29,7 @@ function Card(imagePathway, isFlippedOver, givenStyle, degreeRotation){
       animate={active && !isFlippedOver ? "active":"disabled"}
       variants={container}
       whileHover={active || isFlippedOver ? {}:{rotate: degreeRotation, transformOrigin: tOrigin, translateY:-10}}
-      onClick={() => setActive(!active)}
+      onClick={() => [setActive(true)]}
       style={givenStyle}
       className="card" 
       initial={{rotate: degreeRotation, transformOrigin:tOrigin}} 
