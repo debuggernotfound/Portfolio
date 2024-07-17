@@ -240,3 +240,4 @@ class Game {
         return false;
     }
 }
+export default Game;

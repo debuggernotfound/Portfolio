@@ -1,5 +1,5 @@
-.Page {
-    background-color: green;
+.page{
+    background-color: rgb(255, 255, 255);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -7,24 +7,34 @@
     align-items: center;     
     height: 100vh;
 }
-.Title{
-    font-size: 40pt;
+.title{
+    font-size: 150pt;
     font-family:cursive;
+    /* change font to be bubble letters */
 }
-.Play{
+.btn{
     background-color: #3f7221;
     border: black;
     color: #ffffff;
     padding: 10px;
     font-size: 16px;
-    width: 100px;
+    width: 150px;
+    height:60px;
     cursor:pointer;
     font-family:'Comfortaa', cursive;
+    margin-bottom:40px;
+    border-radius:40px;
 }
-.Play:hover{
+.btn:hover{
     background-color: gray;
 }
-.Hands{
+/* .Hands{
     position:fixed;
     
+} */
+.table{
+    position:absolute;
+    background-color:aqua;
+    height:100%;
+    width: 100%;
 }

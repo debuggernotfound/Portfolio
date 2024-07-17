@@ -4,7 +4,7 @@ import {motion, LayoutGroup, useDragControls, animate, Variants, AnimatePresence
 import {machineHandState} from "./GameStates.js";
 import {playerHandState} from "./GameStates.js";
 import {useAtom, useAtomValue, useSetAtom } from 'jotai';
-function Card(isRemovedCard, index, imagePathway, isFlippedOver, givenStyle, degreeRotation, RCAProxy){
+function PlayerCard(index, imagePathway, isFlippedOver, givenStyle, degreeRotation, RCAProxy){
   // const [active, setActive] = React.useState(false);
     let active = false;
     let translateUpDown = isFlippedOver ? 1:-1
@@ -17,19 +17,19 @@ function Card(isRemovedCard, index, imagePathway, isFlippedOver, givenStyle, deg
     };
     const imageName = isFlippedOver ? `flipped_card.jpg`: `${imagePathway}.png`;
     const imagePath = `./cards/${imageName}`;
-    if(isRemovedCard){
-      console.log("returned");
-      return(
-        <motion.div 
-        initial = {{rotate: degreeRotation, transformOrigin: tOrigin}}
-        animate={{rotate:0, translateY:-300}}
-        className="card" 
-        >
-          <img
-           src = {imagePath} alt={""} className="card_image"/>
-        </motion.div>
-      )
-    }
+    // if(isRemovedCard){
+    //   console.log("returned");
+    //   return(
+    //     <motion.div 
+    //     initial = {{rotate: degreeRotation, transformOrigin: tOrigin}}
+    //     animate={{rotate:0, translateY:-300}}
+    //     className="card" 
+    //     >
+    //       <img
+    //        src = {imagePath} alt={""} className="card_image"/>
+    //     </motion.div>
+    //   )
+    // }
     // const handleClick = () => {
     //   setPlayerHand(prevHand => {
     //     const nHand = [...prevHand];
@@ -47,9 +47,9 @@ function Card(isRemovedCard, index, imagePathway, isFlippedOver, givenStyle, deg
       variants={container}
       whileHover={active || isFlippedOver ? {}:{rotate: degreeRotation, transformOrigin: tOrigin, translateY:-10}}
       onClick={() => [RCAProxy.i = {index, imagePathway, isFlippedOver}]}
-      // why is setting player hand resulting in less hooks than expected
       style={givenStyle}
-      exit={{translateY:-300}}
+      transition={{type: "tween"}}
+      exit={{rotate:0, translateY:-250}}
       className="card" 
       initial={{rotate: degreeRotation, transformOrigin:tOrigin}} 
       >
@@ -58,4 +58,4 @@ function Card(isRemovedCard, index, imagePathway, isFlippedOver, givenStyle, deg
       </motion.div>
     )
   }
-export default Card;
+export default PlayerCard;

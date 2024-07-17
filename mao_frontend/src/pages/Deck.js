@@ -1,11 +1,14 @@
 import React from 'react';
-class DrawDeck{
-    constructor(topCard){
-        this.topCard = topCard;
-    }
-    renderDrawDeck(){
-        
-    }
+import motion from 'framer-motion';
+import "./Card.scss"
+function DrawDeck(){
+  const imageName = `flipped_card.jpg`;
+  const imagePath = `./cards/${imageName}`;
+  return(
+    <motion.div className="deck">
+        <img src = {imagePath} alt={""} className="card_image"/>
+    </motion.div>
+  )
 }
 export default DrawDeck;
 class Card{
