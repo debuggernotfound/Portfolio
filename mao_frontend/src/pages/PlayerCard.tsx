@@ -11,8 +11,8 @@ function PlayerCard(index, imagePathway, isFlippedOver, givenStyle, degreeRotati
     let tOrigin = isFlippedOver ? `center ${-30}%` : `center ${150}%`;
     let whileHoverConstant = isFlippedOver ? 0 : 20*translateUpDown
     const container: Variants = {
-      active: {rotate:0, translateY:-300},
-      disabled: {rotate: degreeRotation, transformOrigin: tOrigin},
+      active: {rotate:0, translateY:-300, width:`${100}px`},
+      disabled: {transition:{delay: 0.5}, rotate: degreeRotation, transformOrigin: tOrigin, width: `${100}px`},
       hover: {rotate: degreeRotation, transformOrigin: tOrigin, translateY:10}
     };
     const imageName = isFlippedOver ? `flipped_card.jpg`: `${imagePathway}.png`;
@@ -40,18 +40,15 @@ function PlayerCard(index, imagePathway, isFlippedOver, givenStyle, degreeRotati
     // }
     return(
       <motion.div 
-      //animate states = 0
-      //put blue highlight on hover
+      initial={{rotate: degreeRotation, transformOrigin:tOrigin, width:0}}
       key={imagePathway}
-      animate={active && !isFlippedOver ? "active":"disabled"}
-      variants={container}
+      animate={{transition: {width: {delay: 1}}, rotate: degreeRotation, transformOrigin: tOrigin, width: `${100}px`}}
       whileHover={active || isFlippedOver ? {}:{rotate: degreeRotation, transformOrigin: tOrigin, translateY:-10}}
       onClick={() => [RCAProxy.i = {index, imagePathway, isFlippedOver}]}
       style={givenStyle}
       transition={{type: "tween"}}
-      exit={{rotate:0, translateY:-250}}
+      exit={{rotate:0, translateY:-250, translateX:-100}}
       className="card" 
-      initial={{rotate: degreeRotation, transformOrigin:tOrigin}} 
       >
         <img
          src = {imagePath} alt={""} className="card_image"/>

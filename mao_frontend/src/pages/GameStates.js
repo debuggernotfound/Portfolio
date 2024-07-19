@@ -5,20 +5,20 @@ import{
 } from 'jotai';
 
 function GameStates(){
-    console.log(getInitialMachineHandNumber());
+    // console.log(getInitialMachineHandNumber());
     return "";
 }
-async function getInitialMachineHandNumber(){
-    const res = await fetch('http://localhost:3001/initial-machine-hand');
-    if (!res.ok){
-        throw new Error('network error');
-    }
-    const num = await res.json();
-    return num;
-    // const fetchData = async() => {const result = await fetch('http://localhost:3001/initial-machine-hand')}
-    // let num = await fetch('http://localhost:3001/initial-machine-hand');
-    // return num;
-}
+// async function getInitialMachineHandNumber(){
+//     const res = await fetch('http://localhost:3001/initial-machine-hand');
+//     if (!res.ok){
+//         throw new Error('network error');
+//     }
+//     const num = await res.json();
+//     return num;
+//     // const fetchData = async() => {const result = await fetch('http://localhost:3001/initial-machine-hand')}
+//     // let num = await fetch('http://localhost:3001/initial-machine-hand');
+//     // return num;
+// }
 // export const fetchInitialMachineHandNumber = async() => {
 //     const res = await fetch('http://localhost:3001/initial-machine-hand');
 //     if (!res.ok){
@@ -36,5 +36,9 @@ export const playerHandState = atom(["ace_of_hearts", "king_of_spades", "ten_of_
 export const topCardState = atom("four_of_clubs");
 
 export const lastRemovedCardState = atom("");
+
+export const isInitialPlayerHand = true;
+
+export const isInitialMachineHand = true;
 
 export default GameStates;
