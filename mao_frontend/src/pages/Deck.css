@@ -1,6 +1,7 @@
 .deck{
+    width:100px;
     height:150px;
-    position:fixed;
+    position:absolute;
     bottom: 314px;
     left: 750px;
     /* background-color: blueviolet; */

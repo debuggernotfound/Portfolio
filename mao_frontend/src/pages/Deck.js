@@ -5,7 +5,7 @@ import "./Deck.css";
 function DrawDeck(isMachine, degreeRotation, z_Index){
   const imageName = `flipped_card.jpg`;
   const imagePath = `./cards/${imageName}`;
-  let toTranslateY = 260;
+  let toTranslateY = 245;
   let toTranslateX = -30;
   if(isMachine){
     toTranslateY = -toTranslateY;
@@ -14,8 +14,10 @@ function DrawDeck(isMachine, degreeRotation, z_Index){
     <motion.div className="deck"
     style={{zIndex: z_Index}}
     initial={{width:`${100}px`}}
-    animate={{transition:{translateX:{duration:0.6}, translateY:{duration:0.6}, rotate:{delay:0.4, duration:0.2}, width:{duration:0.2, delay:0.8}},
-    translateX: toTranslateX, translateY: toTranslateY, rotate:degreeRotation, width:0}}
+    animate={{transition:{translateX:{duration:0.6, delay: 0.01*z_Index}, translateY:{duration:0.6, delay: 0.01*z_Index}, rotate:{delay:0.2 + 0.01*z_Index, duration:0.4}, 
+    width:{duration:0.2, delay:0.8}}, translateX: toTranslateX, translateY: toTranslateY, rotate:degreeRotation, width:0}}
+    // animate={{transition:{translateX:{duration:0.6}, translateY:{duration:0.6}, rotate:{delay:0.2, duration:0.4}, width:{duration:0.2, delay:0.8}},
+    // translateX: toTranslateX, translateY: toTranslateY, rotate:degreeRotation, width:0}}
     >
         <img src = {imagePath} alt={""} className="card_image"/>
     </motion.div>

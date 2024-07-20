@@ -1,5 +1,5 @@
 .card {
-    width: 100px; 
+    width: 105px; 
     height: 150px; 
     border-radius: 5px;
     border-width: 1px;
@@ -13,7 +13,26 @@
     align-items: center;
     justify-content: center;
     box-shadow: 2px 2px 10px rgba(84, 83, 83, 0.086);
+    bottom:35%; 
   } 
+  .machine_card{
+    top: 324px;
+    left: 750px;
+    width: 105px; 
+    height: 150px; 
+    border-radius: 5px;
+    border-width: 1px;
+    position: absolute;
+    box-shadow: 0 0 30px transparentize(black, 0.8);
+    right: 50%; 
+    //transform-origin: center 175%;
+    background-color: #f8f8f800;
+    display:block;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 10px rgba(84, 83, 83, 0.086);
+    bottom:0%; 
+  }
   .card_image {
     border-radius: 5px;
     width:100%;
@@ -21,8 +40,5 @@
     position:sticky;
     pointer-events:none;
   }
-  .deck {
-    position:absolute;
-    
-  }
+
   

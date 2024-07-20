@@ -1,5 +1,5 @@
 .topCard{
-    position: relative;
+    position: absolute;
     justify-self: center; 
     align-self: center;
     width: 100px; 
@@ -8,7 +8,7 @@
     border-width: 1px;
     box-shadow: 0 0 30px transparentize(black, 0.8);
     top: 43%;
-    left:43%;
+    left:44%;
 
     background-color: #f8f8f800;
     box-shadow: 2px 2px 10px rgba(84, 83, 83, 0.086);

@@ -1,6 +1,6 @@
 import React from 'react';
 import './Card.scss';
-import {motion, LayoutGroup, useDragControls, animate, Variants, AnimatePresence} from 'framer-motion';
+import {motion, Variants, AnimatePresence, stagger} from 'framer-motion';
 import {machineHandState} from "./GameStates.js";
 import {playerHandState} from "./GameStates.js";
 import {useAtom, useAtomValue, useSetAtom } from 'jotai';
@@ -47,7 +47,7 @@ function PlayerCard(index, imagePathway, isFlippedOver, givenStyle, degreeRotati
       onClick={() => [RCAProxy.i = {index, imagePathway, isFlippedOver}]}
       style={givenStyle}
       transition={{type: "tween"}}
-      exit={{rotate:0, translateY:-250, translateX:-100}}
+      exit={{rotate:0, translateY:-240, translateX:-86}}
       className="card" 
       >
         <img
