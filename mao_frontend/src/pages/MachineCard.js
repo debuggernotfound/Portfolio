@@ -17,7 +17,7 @@ return(
   style={givenStyle}
   animate={{transition:{translateX:{duration:0.6, delay: 0.01*index}, translateY:{duration:0.6, delay: 0.01*index}, rotate:{delay:0.2 + 0.01*index, duration:0.4}, 
   width:{duration:0.2, delay:0.8}}, translateX: toTranslateX, translateY: toTranslateY, rotate:degreeRotation}}
-  key={index}
+  key={degreeRotation}
   exit={{rotate:0, translateY:-250, translateX: -10}}
   className="machine_card" 
   >

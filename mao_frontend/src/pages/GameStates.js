@@ -34,6 +34,10 @@ export const machineHandState = atom(
     //replace with get machineHandState
 );
 
+export const chatBoxFilledState = atom("");
+
+export const chatsInChatBoxState = atom(new Array());
+
 export const playerHandState = atom(["ace_of_hearts", "king_of_spades", "ten_of_spades", "two_of_hearts", "two_of_spades"]);
 
 export const topCardState = atom("four_of_clubs");

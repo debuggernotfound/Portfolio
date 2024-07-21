@@ -30,7 +30,7 @@ function Hand(cards, isMachine, numCardsIfMachine){
     if(isMachine){
       degreeIncrement = (numCardsIfMachine < 8) ? 15 : 120/numCardsIfMachine;
       for(let i = 0; i < numCardsIfMachine; i++){
-        cards.push(MachineCard(i, getCardStyle(numCardsIfMachine, i, isMachine), getRotation(numCardsIfMachine, i, degreeIncrement)));
+        cards.push(MachineCard(i, getCardStyle(numCardsIfMachine, i, isMachine, degreeIncrement), getRotation(numCardsIfMachine, i, degreeIncrement)));
       }
     }
     else{

@@ -13,6 +13,7 @@ import{
 } from 'jotai';
 import {machineHandState, topCardState, playerHandState, isInitialMachineHand, isInitialPlayerHand} from "./GameStates.js";
 import DrawDeck from './Deck.js';
+import ChatBox from './ChatBox.js';
 //import {motion} from "framer-motion";
 function Game(){
     const queryClient = new QueryClient(); 
@@ -20,6 +21,7 @@ function Game(){
     return(
         <>
         <div className = "table">
+            {ChatBox()}
             {Hand(new Array(), true, useAtomValue(machineHandState))}
             {topDeckCard()}
             {topCard(useAtomValue(topCardState))}

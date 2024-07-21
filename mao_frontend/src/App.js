@@ -20,7 +20,6 @@ function App() {
         <Route path="/end" element={<End />}/>
       </Routes>
     </Router>
-
     </QueryClientProvider>
 
   );
