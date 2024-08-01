@@ -9,16 +9,13 @@ class CardRule{
     getActionNeeded(){
         return this.actionNeeded;
     }
-    getgivenSuitOrValue(){
+    getGivenSuitOrValue(){
         return this.givenSuitOrValue;
     }
     getisSuit(){
         return this.isSuit;
     }
     cardRuleSatisfied(card, actionTaken){
-        for(let i = 0; i < actionTaken.length; i++){
-            actionTaken[i] = actionTaken[i].toLowerCase();
-        }
         if(this.isSuit){
             if(card.getSuit()===(this.givenSuitOrValue)){
                 let indexOfAction = actionTaken.indexOf(this.actionNeeded);

@@ -13,7 +13,6 @@
     /* change font to be bubble letters */
 }
 .btn{
-    
     background-color: #3f7221;
     border: black;
     color: #ffffff;
@@ -28,6 +27,16 @@
 }
 .btn:hover{
     background-color: gray;
+}
+.end_turn_button{
+    background-color:burlywood;
+    cursor:pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size:20px;
+    border-radius:10px;
+    position:absolute;
+    bottom:5%;
+    left:5%;
 }
 /* .Hands{
     position:fixed;

@@ -10,8 +10,9 @@ class Game {
         this.deck = new Deck(1, true);
         //assign machine and person cards
         this.machineCards = new Map();
-        let tempMachineArr = this.deck.draw(21);
-        for(let i = 0; i < 21; i++){
+        let machineCardsNumber = 5;
+        let tempMachineArr = this.deck.draw(machineCardsNumber);
+        for(let i = 0; i < machineCardsNumber; i++){
             this.machineCards.set(tempMachineArr[i], " ");
         }
         this.playerCards = new Map();
@@ -22,8 +23,8 @@ class Game {
         //get top card
         this.topCard = this.deck.draw(1).at(0);
         //create random card rule set
-        const suits = ["Clubs", "Spades", "Diamonds", "Hearts"];
-        const values = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"]
+        const suits = ["clubs", "spades", "diamonds", "hearts"];
+        const values = ["ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king"]
         const actions = ["knock", "saying hello", "who's the monkey", "there's the monkey", "hola senora"];
         let lengthOfCRA = Math.floor(Math.random()*5) + 1;
         this.cardRuleArray = new Array();
@@ -91,9 +92,9 @@ class Game {
     }
     processCardPlayed(cardPlayed, isPlayer){
         //might deal with the people playing the wrong suit in react itself
-        if(!(this.topCard.getSuit()===cardPlayed.getSuit()) && !(this.topCard.getValue()===cardPlayed.getValue())){
-            return false;
-        }
+        // if(!(this.topCard.getSuit()===cardPlayed.getSuit()) && !(this.topCard.getValue()===cardPlayed.getValue())){
+        //     return false;
+        // }
         this.topCard = cardPlayed;
         if(!(this.topCard.getValue()===("Ace"))){
             this.playersTurn = !this.playersTurn;
@@ -111,13 +112,13 @@ class Game {
     //takes a card object and an array of strings and returns an array that pops out the number of cards that the player will draw, which cards they are, and the reasons why
     determinePenalty(cardPlayed, actionTaken){
         let cardPenaltyReasons = new Array();
-        for(let i = 0; i < actionTaken.length; i++){
-            actionTaken[i] = actionTaken[i].toLowerCase();
-        }
+        let numberToDraw = 0; 
+        actionTaken = actionTaken.map((action) => (action.toLowerCase()));
         //card put down was incorrect
         if(!this.playersTurn){
             cardPenaltyReasons.push("Played out of order. It is the machine's turn.");
-            this.playerCards = this.playerCards.set(this.drawCard(true), " ");
+            cardPenaltyReasons.push(this.drawCard(true));
+            cardPenaltyReasons.push(1);
             return cardPenaltyReasons;
         }
         if(cardPlayed==="draw"){
@@ -127,9 +128,11 @@ class Game {
                     numberToDraw++;
                 }
             }
-            for(let i = 0; i < numberToDraw; i++){
-                this.drawCard(true);
+            for(let i = 0; i < numberToDraw + 1; i++){
+                cardPenaltyReasons.push(this.drawCard(true));
             }
+            cardPenaltyReasons.push(numberToDraw + 1);
+            console.log("Card penalty reasons: " + cardPenaltyReasons);
             return cardPenaltyReasons;
         }
         if(!this.processCardPlayed(cardPlayed, true)){
@@ -138,9 +141,9 @@ class Game {
             return cardPenaltyReasons;
         }
         //random card rules 
-        let numberToDraw = 0; 
         for(let i = 0; i < this.cardRuleArray.length; i++){
-            let tempCardRule = this.cardRuleArray[i];
+            let tempCardRule = this.cardRuleArray.at(i);
+            console.log(tempCardRule.getGivenSuitOrValue() + ": " + tempCardRule.getActionNeeded());
             if(!tempCardRule.cardRuleSatisfied(cardPlayed, actionTaken)){
                 cardPenaltyReasons.push("Failure to say \"" + tempCardRule.getActionNeeded() + "\"");
                 numberToDraw++;
@@ -148,8 +151,10 @@ class Game {
         }
         //set card rules
         //* spades
-        if(cardPlayed.getSuit()===("Spades")){
+        if(cardPlayed.getSuit()===("spades")){
+            console.log("i am here executing spades code");
             let action = cardPlayed.getValue().toLowerCase() + " of spades";
+            console.log("action taken array: " + actionTaken);
             let index = actionTaken.indexOf(action);
             if(index == -1){
                 cardPenaltyReasons.push("Failure to say \"" + action + "\"");
@@ -160,8 +165,9 @@ class Game {
             }
         }
         //* sevens
-        let sevenRule = new CardRule(false, "Seven", "have a nice day");
-        if(cardPlayed.getValue()===("Seven")){
+        let sevenRule = new CardRule(false, "seven", "have a nice day");
+        if(cardPlayed.getValue()===("seven")){
+            //TODO: ADD CODE TO RETURN THE MACHINE HAND NUMBER TOO
             this.drawCard(false);
         }
         if(!sevenRule.cardRuleSatisfied(cardPlayed, actionTaken)){
@@ -181,7 +187,7 @@ class Game {
             }
         }
         //* all hail rule
-        if(cardPlayed.getValue()===("King")){
+        if(cardPlayed.getValue()===("king")){
             let action = "all hail king of " + cardPlayed.getSuit().toLowerCase();
             let index = actionTaken.indexOf(action);
             if(index == -1){
@@ -208,7 +214,7 @@ class Game {
 
     drawCard(guaranteeAddToPlayer){
         let tempDrawCard = this.deck.draw(1).at(0);
-        while(this.playerCards.hasOwnProperty(tempDrawCard) || this.machineCards.hasOwnProperty(tempDrawCard)){
+        while(this.playerCards.has(tempDrawCard) || this.machineCards.has(tempDrawCard)){
             tempDrawCard = this.deck.draw(1).at(0);
         }
         if(this.playersTurn || guaranteeAddToPlayer){
@@ -220,41 +226,54 @@ class Game {
         return tempDrawCard.getImagePathway();
     }
     determineMachineMove(){
+        console.log(this.machineCards);
         let machineSays = new Array();
         let tempCard;
         let tempArr = this.machineCards.keys();
+        let tempIndex;
+        console.log("top card: " + this.topCard);
         for(let i = 0; i < this.machineCards.size; i++){
             tempCard = tempArr.next().value;
-            if(tempCard.getSuit() == this.topCard.getSuit() || tempCard.getValue() == this.topCard.getValue()){
+            console.log(tempCard);
+            if(tempCard.getSuit() === this.topCard.getSuit() || tempCard.getValue() === this.topCard.getValue()){
                 this.processCardPlayed(tempCard, false);
+                console.log(i);
+                tempIndex = i;
                 break;
             }
+            tempCard = undefined;
         }
         if(tempCard == undefined){
+            console.log("undefined");
             machineSays.push(this.drawCard(false));
+            this.playersTurn=true;
             machineSays.push(false);
             return machineSays;
         }
         let tempActionTakenArr = new Array();
         for(let i = 0; i < this.cardRuleArray.length; i++){
-            let tempCardRule = this.cardRuleArray[i];
+            let tempCardRule = this.cardRuleArray.at(i);
+            console.log(tempCardRule);
             if(!tempCardRule.cardRuleSatisfied(tempCard, tempActionTakenArr)){
                 machineSays.push(tempCardRule.getActionNeeded());
             }
         }
-        if(tempCard.getSuit()===("Spades")){
-            machineSays.push(tempCard.getValue.toLowerCase + " of spades");
+        console.log(tempCard.getSuit() + " " + tempCard.getValue());
+        if(tempCard.getSuit()===("spades")){
+            machineSays.push(tempCard.getValue().toLowerCase() + " of spades");
         }
-        if(tempCard.getValue()===("Seven")){
+        if(tempCard.getValue()===("seven")){
             machineSays.push("have a nice day");
         }
         if(this.machineCards.length == 1){
             machineSays.push("mao");
         }
-        if(tempCard.getValue()===("King")){
+        if(tempCard.getValue()===("king")){
             machineSays.push("All hail king of " + tempCard.getSuit());
         }
+        console.log(machineSays);
         machineSays.push(tempCard.getImagePathway());
+        machineSays.push(tempIndex);
         machineSays.push(true);
         return machineSays;
     }

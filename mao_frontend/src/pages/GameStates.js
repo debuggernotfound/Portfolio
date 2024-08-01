@@ -29,16 +29,19 @@ function GameStates(){
 
 
 // export const machineHandState = () => {return useQuery(['initialMachineHand'], getInitialMachineHandNumber)};
-export const machineHandState = atom(
-    21
-    //replace with get machineHandState
-);
+export const machineHandState = atom([]);
+
+export const gameIDState = atom("");
+
+export const lastIndexOfActionArrayState = atom(0);
+
+export const playerPlayedCardState = atom("");
 
 export const chatBoxFilledState = atom("");
 
 export const chatsInChatBoxState = atom(new Array());
 
-export const playerHandState = atom(["ace_of_hearts", "king_of_spades", "ten_of_spades", "two_of_hearts", "two_of_spades"]);
+export const playerHandState = atom([]);
 
 export const topCardState = atom("four_of_clubs");
 

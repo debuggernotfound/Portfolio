@@ -8,7 +8,9 @@ router.get("/initial-player-hand", gameControllerFunctions.getInitialPlayerHand)
 
 router.get("/initial-machine-hand-number", gameControllerFunctions.getInitialMachineHandNumber);
 
-router.get("/update-player-hand", gameControllerFunctions.updatePlayerHand);
+router.post("/update-player-hand", (req, res) => {
+    gameControllerFunctions.updatePlayerHand(req, res);
+});
 
 router.get("/get-machine-move", gameControllerFunctions.getMachineMove);
 
