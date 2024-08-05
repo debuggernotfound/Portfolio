@@ -96,9 +96,10 @@ class Game {
         //     return false;
         // }
         this.topCard = cardPlayed;
-        if(!(this.topCard.getValue()===("Ace"))){
-            this.playersTurn = !this.playersTurn;
-        }
+        this.playersTurn = !this.playersTurn;
+        // if(!(this.topCard.getValue()===("Ace"))){
+        //     this.playersTurn = !this.playersTurn;
+        // }
         if(isPlayer){
             this.playerCards.delete(cardPlayed);
             return true;
