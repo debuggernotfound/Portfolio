@@ -1,4 +1,6 @@
 {
     "java.debug.settings.onBuildFailureProceed": true,
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "appService.defaultWebAppToDeploy": "/subscriptions/81f2ec9f-2891-489a-8e57-3a01f953e3fb/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/gameofmao",
+    "appService.deploySubpath": "mao_frontend"
 }
