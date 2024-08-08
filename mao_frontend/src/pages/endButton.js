@@ -6,7 +6,7 @@ import './home.css'
 import { useAtom, useAtomValue } from 'jotai';
 
 function EndButton(){
-    const initialGameURL = "http://localhost:3001/api/v1/game/";
+    const initialGameURL = "https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/";
     const [chatsInChatBox, setChatsInChatBox] = useAtom(chatsInChatBoxState);
     const [playerPlayedCard, setPlayerPlayedCard] = useAtom(playerPlayedCardState);
     const [playerHand, setPlayerHand] = useAtom(playerHandState);

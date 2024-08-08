@@ -13,6 +13,9 @@ const corsOptions ={
     optionSuccessStatus:200
 }
 app.use(cors(corsOptions));
+app.get("/", (req, res) => {
+    res.send('Hello world!');   
+});
 
 // let mainGame; 
 // app.get("/initialize-game", (req, res) => {
@@ -22,9 +25,7 @@ app.use(cors(corsOptions));
 // app.get("/initial-machine-hand", (req, res) =>  {
 //     res.json(mainGame.getMachineNumberOfCards());
 // });
-// app.get("/", (req, res) => {
-//     res.send('Hello world!');   
-// });
+
 // app.get("/test", (req, res) => {
 //     const {message} = req.body;
 //     let response; 

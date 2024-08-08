@@ -14,7 +14,7 @@ function Home(){
     const [lastRemovedCard, setLastRemovedCard] = useAtom(lastRemovedCardState);
     const [playerPlayedCard, setPlayerPlayedCard] = useAtom(playerPlayedCardState);
     const [machineHand, setMachineHand] = useAtom(machineHandState);
-    const initializeGameURL = "http://localhost:3001/api/v1/game/";
+    const initializeGameURL = "https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/";
     const handleClick = async() => {
         await axios.get(initializeGameURL).then((response) => {
             let givenGameID = response.data.gameID;
@@ -30,7 +30,7 @@ function Home(){
             setTopCard(topCardImagePathway);
             navigate("/game");
         });
-        await axios.get(initializeGameURL + "/initial-machine-hand-number").then((response) => {
+        await axios.get(initializeGameURL + "initial-machine-hand-number").then((response) => {
             let initialMachineHandState = [];
             for(let i = 0; i < response.data.initialNumber; i++){
                 initialMachineHandState.push("flipped_card");
