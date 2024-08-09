@@ -14,7 +14,7 @@ function TopDeckCard(){
     const [lastIndexOfActionArray, setLastIndexOfActionArray] = useAtom(lastIndexOfActionArrayState);
     const [machineHand, setMachineHandState] = useAtom(machineHandState);
     const [topCard, setTopCard] = useAtom(topCardState);
-    const initialGameURL = "https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/";
+    const initialGameURL = "http://localhost:3001/api/v1/game/";
     let changedPlayerHand = [...playerHand];
     let changedChatsArr = [...chatsInChatBox];
     const handleClick = async() => {

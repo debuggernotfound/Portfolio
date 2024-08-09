@@ -1,6 +1,7 @@
 import * as gameService from "../services/gameService.js";
 //form new game when the home "play" button is pressed
 export const createNewGame = (req, res) => {
+    console.log("Controller creates new game");
     const newGameCreated = gameService.createNewGame();
     res.send({gameID: newGameCreated});
 };

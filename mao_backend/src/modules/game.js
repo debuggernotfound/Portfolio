@@ -17,7 +17,8 @@ class Game {
         let tempPlayerArr = this.deck.draw(7);
         for(let i = 0; i < 7; i++){
             this.playerCards.set(tempPlayerArr[i], " ");
-        }       
+        }  
+        console.log(tempMachineArr);     
         //get top card
         this.topCard = this.deck.draw(1).at(0);
         //initialize past card array
@@ -35,7 +36,7 @@ class Game {
             {"type": "value sequence", "numberOfValuesToCheck": 2, "validValues": [["ace", "seven"], ["seven", "ace"], ["two", "six"], ["six", "two"], ["three", "five"], ["four", "four"]], "penalty": "Failure to do basic arithmetic", "actionNeeded": "maths"},
             {"type": "suit sequence", "numberOfValuesToCheck": 5, "validValues": [["heart", "heart", "heart", "heart", "heart"]], "penalty": "Failure to introduce the queen in Alice of Wonderland", "actionNeeded": "welcome, queen of hearts"}
         ]
-        let lengthOfCRA = Math.floor(Math.random()*this.totalCardRules.length) + 1;
+        let lengthOfCRA = Math.floor(Math.random()*(5)) + 2;
         this.cardRuleArray = new Set();
         for(let i = 0; i < lengthOfCRA; i++){
             let tempIndexOfRule = Math.floor(Math.random()*this.totalCardRules.length);
@@ -45,42 +46,6 @@ class Game {
                 tempIndexOfRule = Math.floor(Math.random()*this.totalCardRules.length);
                 this.cardRuleArray.add(this.totalCardRules.at(tempIndexOfRule));
             }
-            // let suitOrValue = Math.floor(Math.random()*2);
-            // let tempRule;
-            // let actionsIndex = Math.floor(Math.random()*actions.length);
-            // if(suitOrValue == 0){
-            //     let suitsEmpty = true;
-            //     for(let j = 0; j < suits.length; j++){
-            //         if(!(suits[j]===" ")){
-            //             suitsEmpty = false;
-            //         }
-            //     }
-            //     if(!suitsEmpty){
-            //         let sIndex = Math.floor(Math.random()*4);
-            //         while(suits[sIndex]===" "){
-            //             sIndex = Math.floor(Math.random()*4);
-            //         }
-            //         tempRule = new CardRule(true, suits[sIndex], actions[actionsIndex]);
-            //         suits[sIndex] = " ";
-            //     }     
-            // }
-            // else{
-            //     let valuesEmpty = true;
-            //     for(let j = 0; j < values.length; j++){
-            //         if(!(values[j]===" ")){
-            //             valuesEmpty = false;
-            //         }
-            //     }
-            //     if(!valuesEmpty){
-            //         let vIndex = Math.floor(Math.random()*13);
-            //         while(values[vIndex]===" "){
-            //             vIndex = Math.floor(Math.random()*13);
-            //         }
-            //         tempRule = new CardRule(false, values[vIndex], actions[actionsIndex]);
-            //         values[vIndex] = " ";
-            //     }                 
-            // }
-            // this.cardRuleArray.push(tempRule);
         }
         this.cardRuleArray = Array.from(this.cardRuleArray);
         //assign who's turn it is
@@ -147,7 +112,7 @@ class Game {
                 cardPenaltyReasons.push(this.drawCard(true));
             }
             cardPenaltyReasons.push(numberToDraw + 1);
-            console.log("Card penalty reasons: " + cardPenaltyReasons);
+            // console.log("Card penalty reasons: " + cardPenaltyReasons);
             return cardPenaltyReasons;
         }
         if(!this.processCardPlayed(cardPlayed, true)){
@@ -204,7 +169,7 @@ class Game {
                     let doesValueSequenceMatch;
                     for(let i = 0; i < currCardRule.numberOfValuesToCheck; i++){
                         let currentCardToBePushed = this.pastCards.at(totalNumPastCards - 1 - i).getValue();
-                        console.log("curr card to be pushed" + currentCardToBePushed);
+                        // console.log("curr card to be pushed" + currentCardToBePushed);
                         currPastCardSequence.push(currentCardToBePushed);
                     }
                     for(let i = 0; i < currCardRule.validValues.length; i++){
@@ -275,9 +240,9 @@ class Game {
         //set card rules
         //* spades
         if(cardPlayed.getSuit()===("spades")){
-            console.log("i am here executing spades code");
+            // console.log("i am here executing spades code");
             let action = cardPlayed.getValue().toLowerCase() + " of spades";
-            console.log("action taken array: " + actionTaken);
+            // console.log("action taken array: " + actionTaken);
             let index = actionTaken.indexOf(action);
             if(index == -1){
                 cardPenaltyReasons.push("Failure to say \"" + action + "\"");
@@ -334,13 +299,12 @@ class Game {
         cardPenaltyReasons.push(numberToDraw);
         return cardPenaltyReasons;
     }
-
-    drawCard(guaranteeAddToPlayer){
+    drawCard(isAddedToPlayer){
         let tempDrawCard = this.deck.draw(1).at(0);
-        while(this.playerCards.has(tempDrawCard) || this.machineCards.has(tempDrawCard)){
+        while(this.playerCards.has(tempDrawCard) || this.machineCards.has(tempDrawCard) || this.topCard.getImagePathway()===tempDrawCard.getImagePathway()){
             tempDrawCard = this.deck.draw(1).at(0);
         }
-        if(this.playersTurn || guaranteeAddToPlayer){
+        if(isAddedToPlayer){
             this.playerCards.set(tempDrawCard, " ");
         }
         else{
@@ -357,17 +321,17 @@ class Game {
         console.log("top card: " + this.topCard);
         for(let i = 0; i < this.machineCards.size; i++){
             tempCard = tempArr.next().value;
-            console.log(tempCard);
+            // console.log(tempCard);
             if(tempCard.getSuit() === this.topCard.getSuit() || tempCard.getValue() === this.topCard.getValue()){
                 this.processCardPlayed(tempCard, false);
-                console.log(i);
+                // console.log(i);
                 tempIndex = i;
                 break;
             }
             tempCard = undefined;
         }
         if(tempCard == undefined){
-            console.log("undefined");
+            // console.log("undefined");
             machineSays.push(this.drawCard(false));
             this.playersTurn=true;
             machineSays.push(false);
@@ -459,7 +423,7 @@ class Game {
             //     numberToDraw++;
             // }
         }
-        console.log(tempCard.getSuit() + " " + tempCard.getValue());
+        // console.log(tempCard.getSuit() + " " + tempCard.getValue());
         if(tempCard.getSuit()===("spades")){
             machineSays.push(tempCard.getValue().toLowerCase() + " of spades");
         }

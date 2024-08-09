@@ -5,6 +5,7 @@ let game = new Game();
 
 export const createNewGame = () => {
     game = new Game();
+    console.log("new game created");
     return game.ID;
 };
 export const getInitialMachineHandNumber = () => {

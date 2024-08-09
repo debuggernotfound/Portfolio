@@ -1,11 +1,9 @@
 import Deck from "./deck.js";
 import CardRule from "./card_rules.js";
-
-
 class Game {
     constructor(){
         //create id
-        this.ID = Math.floor(Math.random()*1000000)
+        this.ID = Math.floor(Math.random()*1000000);
         //create deck
         this.deck = new Deck(1, true);
         //assign machine and person cards
@@ -22,50 +20,33 @@ class Game {
         }       
         //get top card
         this.topCard = this.deck.draw(1).at(0);
+        //initialize past card array
+        this.pastCards = new Array();
         //create random card rule set
-        const suits = ["clubs", "spades", "diamonds", "hearts"];
-        const values = ["ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king"]
-        const actions = ["knock", "saying hello", "who's the monkey", "there's the monkey", "hola senora"];
-        let lengthOfCRA = Math.floor(Math.random()*5) + 1;
-        this.cardRuleArray = new Array();
+        this.totalCardRules=[
+            {"type": "suitOrValue", "isSuit": true, "validKeys": ["diamonds"], "penalty": "Cultural appropriation", "suitOrValueNeeded": true, "actionNeeded": {"ace": "uno", "two": "dos", "three": "tres", "four": "cuatro", "five": "cinco", "six": "seis", "seven": "siete", "eight": "ocho", "nine": "nueve", "ten": "diez", "jack": "once", "queen": "doce", "king": "trece"}},
+            {"type": "suitOrValue", "isSuit": false, "validKeys": ["queen"], "penalty": "Didn't care about the monkey", "suitOrValueNeeded": false, "actionNeeded": "where's the monkey?"},
+            {"type": "suitOrValue", "isSuit": false, "validKeys": ["ace"], "penalty": "Didn't find the monkey", "suitOrValueNeeded": false, "actionNeeded": "there's the monkey!"},
+            {"type": "suitOrValue", "isSuit": false, "validKeys": ["two", "three", "five", "seven", "jack", "king"], "penalty": "Failure to be good at maths", "suitOrValueNeeded": false, "actionNeeded": "prime"}, 
+            {"type": "suitOrValue", "isSuit": false, "validKeys": ["ace", "five", "ten"], "penalty": "Failure to dispense wise sayings", "suitOrValueNeeded": false, "actionNeeded": "rome wasn't built in a day"},
+            {"type": "suitOrValue", "isSuit": false, "validKeys": ["jack"], "penalty": "Failure to be polite", "suitOrValueNeeded": false, "actionNeeded": "knock knock"},
+            {"type": "value sequence", "numberOfValuesToCheck": 2, "validValues": [["jack", "ace"], ["jack", "two"], ["jack", "three"], ["jack", "four"], ["jack", "five"], ["jack", "six"], ["jack", "seven"], ["jack", "eight"], ["jack", "nine"], ["jack", "ten"], ["jack", "queen"], ["jack", "king"]], "penalty": "Failure to open the door to such a gentleman", "actionNeeded": "who's there?"},
+            {"type": "value sequence", "numberOfValuesToCheck": 3, "validValues": [["ace", "ace", "nine"]], "penalty": "Failure to save lives", "actionNeeded": "emergency emergency!"},
+            {"type": "value sequence", "numberOfValuesToCheck": 2, "validValues": [["ace", "seven"], ["seven", "ace"], ["two", "six"], ["six", "two"], ["three", "five"], ["four", "four"]], "penalty": "Failure to do basic arithmetic", "actionNeeded": "maths"},
+            {"type": "suit sequence", "numberOfValuesToCheck": 5, "validValues": [["heart", "heart", "heart", "heart", "heart"]], "penalty": "Failure to introduce the queen in Alice of Wonderland", "actionNeeded": "welcome, queen of hearts"}
+        ]
+        let lengthOfCRA = Math.floor(Math.random()*(5)) + 2;
+        this.cardRuleArray = new Set();
         for(let i = 0; i < lengthOfCRA; i++){
-            let suitOrValue = Math.floor(Math.random()*2);
-            let tempRule;
-            let actionsIndex = Math.floor(Math.random()*actions.length);
-            if(suitOrValue == 0){
-                let suitsEmpty = true;
-                for(let j = 0; j < suits.length; j++){
-                    if(!(suits[j]===" ")){
-                        suitsEmpty = false;
-                    }
-                }
-                if(!suitsEmpty){
-                    let sIndex = Math.floor(Math.random()*4);
-                    while(suits[sIndex]===" "){
-                        sIndex = Math.floor(Math.random()*4);
-                    }
-                    tempRule = new CardRule(true, suits[sIndex], actions[actionsIndex]);
-                    suits[sIndex] = " ";
-                }     
+            let tempIndexOfRule = Math.floor(Math.random()*this.totalCardRules.length);
+            let currRuleSetLength = this.cardRuleArray.size;
+            this.cardRuleArray.add(this.totalCardRules.at(tempIndexOfRule));
+            while(this.cardRuleArray.size == currRuleSetLength){
+                tempIndexOfRule = Math.floor(Math.random()*this.totalCardRules.length);
+                this.cardRuleArray.add(this.totalCardRules.at(tempIndexOfRule));
             }
-            else{
-                let valuesEmpty = true;
-                for(let j = 0; j < values.length; j++){
-                    if(!(values[j]===" ")){
-                        valuesEmpty = false;
-                    }
-                }
-                if(!valuesEmpty){
-                    let vIndex = Math.floor(Math.random()*13);
-                    while(values[vIndex]===" "){
-                        vIndex = Math.floor(Math.random()*13);
-                    }
-                    tempRule = new CardRule(false, values[vIndex], actions[actionsIndex]);
-                    values[vIndex] = " ";
-                }                 
-            }
-            this.cardRuleArray.push(tempRule);
         }
+        this.cardRuleArray = Array.from(this.cardRuleArray);
         //assign who's turn it is
         this.playersTurn = true;
     }
@@ -91,12 +72,9 @@ class Game {
         return this.playersTurn;
     }
     processCardPlayed(cardPlayed, isPlayer){
-        //might deal with the people playing the wrong suit in react itself
-        // if(!(this.topCard.getSuit()===cardPlayed.getSuit()) && !(this.topCard.getValue()===cardPlayed.getValue())){
-        //     return false;
-        // }
         this.topCard = cardPlayed;
         this.playersTurn = !this.playersTurn;
+        this.pastCards.push(cardPlayed);
         // if(!(this.topCard.getValue()===("Ace"))){
         //     this.playersTurn = !this.playersTurn;
         // }
@@ -133,7 +111,7 @@ class Game {
                 cardPenaltyReasons.push(this.drawCard(true));
             }
             cardPenaltyReasons.push(numberToDraw + 1);
-            console.log("Card penalty reasons: " + cardPenaltyReasons);
+            // console.log("Card penalty reasons: " + cardPenaltyReasons);
             return cardPenaltyReasons;
         }
         if(!this.processCardPlayed(cardPlayed, true)){
@@ -143,19 +121,127 @@ class Game {
         }
         //random card rules 
         for(let i = 0; i < this.cardRuleArray.length; i++){
-            let tempCardRule = this.cardRuleArray.at(i);
-            console.log(tempCardRule.getGivenSuitOrValue() + ": " + tempCardRule.getActionNeeded());
-            if(!tempCardRule.cardRuleSatisfied(cardPlayed, actionTaken)){
-                cardPenaltyReasons.push("Failure to say \"" + tempCardRule.getActionNeeded() + "\"");
-                numberToDraw++;
+            let currCardRule = this.cardRuleArray.at(i);
+            let currType = currCardRule.type;
+            if(currType === "suitOrValue"){
+                if(currCardRule.isSuit && (currCardRule.validKeys.indexOf(cardPlayed.getSuit()) != -1)){
+                    let actionNeeded;
+                    if(currCardRule.suitOrValueNeeded){
+                        let cardValue = cardPlayed.getValue();
+                        actionNeeded = currCardRule.actionNeeded[cardValue];
+                    }
+                    else{
+                        actionNeeded = currCardRule.actionNeeded;
+                    }
+                    let indexOfAction = actionTaken.indexOf(actionNeeded);
+                    if(indexOfAction != -1){
+                        actionTaken[indexOfAction] = "action_processed";
+                    }
+                    else{
+                        cardPenaltyReasons.push(currCardRule.penalty);
+                        numberToDraw++;
+                    }
+                }
+                else if(!currCardRule.isSuit && (currCardRule.validKeys.indexOf(cardPlayed.getValue()) != -1)){
+                    let actionNeeded;
+                    if(currCardRule.suitOrValueNeeded){
+                        let cardValue = cardPlayed.getSuit();
+                        actionNeeded = currCardRule.actionNeeded[cardValue];
+                    }
+                    else{
+                        actionNeeded = currCardRule.actionNeeded;
+                    }
+                    let indexOfAction = actionTaken.indexOf(actionNeeded);
+                    if(indexOfAction != -1){
+                        actionTaken[indexOfAction] = "action_processed";
+                    }
+                    else{
+                        cardPenaltyReasons.push(currCardRule.penalty);
+                        numberToDraw++;
+                    }
+                }
             }
+            else if(currType === "value sequence"){
+                let currPastCardSequence = new Array();
+                let totalNumPastCards = this.pastCards.length;
+                if(totalNumPastCards > currCardRule.numberOfValuesToCheck){
+                    let doesValueSequenceMatch;
+                    for(let i = 0; i < currCardRule.numberOfValuesToCheck; i++){
+                        let currentCardToBePushed = this.pastCards.at(totalNumPastCards - 1 - i).getValue();
+                        // console.log("curr card to be pushed" + currentCardToBePushed);
+                        currPastCardSequence.push(currentCardToBePushed);
+                    }
+                    for(let i = 0; i < currCardRule.validValues.length; i++){
+                        let checkingArr = currCardRule.validValues.at(i);
+                        let currMatches = true;
+                        for(let j = 0; j < checkingArr.length; j++){
+                            if(currPastCardSequence.at(j) !== checkingArr.at(j)){
+                                currMatches = false;
+                                break;
+                            }
+                        }
+                        if(currMatches){
+                            doesValueSequenceMatch = true;
+                        }
+                    }
+                    if(doesValueSequenceMatch){
+                        let indexOfAction = actionTaken.indexOf(currCardRule.actionNeeded);
+                        if(indexOfAction != -1){
+                            actionTaken[indexOfAction] = "action_processed";
+                        }
+                        else{
+                            cardPenaltyReasons.push(currCardRule.penalty);
+                            numberToDraw++;
+                        }
+                    }
+                }
+            }
+            else if(currType === "suit sequence"){
+                let currPastCardSequence = new Array();
+                let totalNumPastCards = this.pastCards.length;
+                let doesSuitSequenceMatch;
+                if(totalNumPastCards > currCardRule.numberOfValuesToCheck){
+                    for(let i = 0; i < currCardRule.numberOfValuesToCheck; i++){
+                        let currentCardToBePushed = this.pastCards.at(totalNumPastCards - 1 - i).getSuit();
+                        currPastCardSequence.push(currentCardToBePushed);
+                    }
+                    for(let i = 0; i < currCardRule.validValues.length; i++){
+                        let checkingArr = currCardRule.validValues.at(i);
+                        let currMatches = true;
+                        for(let j = 0; j < checkingArr.length; j++){
+                            if(currPastCardSequence.at(j) !== checkingArr.at(j)){
+                                currMatches = false;
+                                break;
+                            }
+                        }
+                        if(currMatches){
+                            doesSuitSequenceMatch = true;
+                        }
+                    }
+                    if(doesSuitSequenceMatch){
+                        let indexOfAction = actionTaken.indexOf(currCardRule.actionNeeded);
+                        if(indexOfAction != -1){
+                            actionTaken[indexOfAction] = "action_processed";
+                        }
+                        else{
+                            cardPenaltyReasons.push(currCardRule.penalty);
+                            numberToDraw++;
+                        }
+                    }
+                }
+            }
+            // console.log(tempCardRule.getGivenSuitOrValue() + ": " + tempCardRule.getActionNeeded());
+            // if(!tempCardRule.cardRuleSatisfied(cardPlayed, actionTaken)){
+            //     cardPenaltyReasons.push("Failure to say \"" + tempCardRule.getActionNeeded() + "\"");
+            //     numberToDraw++;
+            // }
         }
         //set card rules
         //* spades
         if(cardPlayed.getSuit()===("spades")){
-            console.log("i am here executing spades code");
+            // console.log("i am here executing spades code");
             let action = cardPlayed.getValue().toLowerCase() + " of spades";
-            console.log("action taken array: " + actionTaken);
+            // console.log("action taken array: " + actionTaken);
             let index = actionTaken.indexOf(action);
             if(index == -1){
                 cardPenaltyReasons.push("Failure to say \"" + action + "\"");
@@ -212,7 +298,6 @@ class Game {
         cardPenaltyReasons.push(numberToDraw);
         return cardPenaltyReasons;
     }
-
     drawCard(guaranteeAddToPlayer){
         let tempDrawCard = this.deck.draw(1).at(0);
         while(this.playerCards.has(tempDrawCard) || this.machineCards.has(tempDrawCard)){
@@ -235,31 +320,109 @@ class Game {
         console.log("top card: " + this.topCard);
         for(let i = 0; i < this.machineCards.size; i++){
             tempCard = tempArr.next().value;
-            console.log(tempCard);
+            // console.log(tempCard);
             if(tempCard.getSuit() === this.topCard.getSuit() || tempCard.getValue() === this.topCard.getValue()){
                 this.processCardPlayed(tempCard, false);
-                console.log(i);
+                // console.log(i);
                 tempIndex = i;
                 break;
             }
             tempCard = undefined;
         }
         if(tempCard == undefined){
-            console.log("undefined");
+            // console.log("undefined");
             machineSays.push(this.drawCard(false));
             this.playersTurn=true;
             machineSays.push(false);
             return machineSays;
         }
-        let tempActionTakenArr = new Array();
+        // let tempActionTakenArr = new Array();
         for(let i = 0; i < this.cardRuleArray.length; i++){
-            let tempCardRule = this.cardRuleArray.at(i);
-            console.log(tempCardRule);
-            if(!tempCardRule.cardRuleSatisfied(tempCard, tempActionTakenArr)){
-                machineSays.push(tempCardRule.getActionNeeded());
+            let currCardRule = this.cardRuleArray.at(i);
+            let currType = currCardRule.type;
+            if(currType === "suitOrValue"){
+                if(currCardRule.isSuit && (currCardRule.validKeys.indexOf(tempCard.getSuit()) != -1)){
+                    let actionNeeded;
+                    if(currCardRule.suitOrValueNeeded){
+                        let cardValue = tempCard.getValue();
+                        actionNeeded = currCardRule.actionNeeded[cardValue];
+                    }
+                    else{
+                        actionNeeded = currCardRule.actionNeeded;
+                    }
+                    machineSays.push(actionNeeded);
+                }
+                else if(!currCardRule.isSuit && (currCardRule.validKeys.indexOf(tempCard.getValue()) != -1)){
+                    let actionNeeded;
+                    if(currCardRule.suitOrValueNeeded){
+                        let cardValue = tempCard.getSuit();
+                        actionNeeded = currCardRule.actionNeeded[cardValue];
+                    }
+                    else{
+                        actionNeeded = currCardRule.actionNeeded;
+                    }
+                    machineSays.push(actionNeeded);
+                }
             }
+            else if(currType === "value sequence"){
+                let currPastCardSequence = new Array();
+                let totalNumPastCards = this.pastCards.length;
+                let doesValueSequenceMatch;
+                if(totalNumPastCards > currCardRule.numberOfValuesToCheck){
+                    for(let i = 0; i < currCardRule.numberOfValuesToCheck; i++){
+                        currPastCardSequence.push(this.pastCards.at(totalNumPastCards - 1 - i).getValue());
+                    }
+                    for(let i = 0; i < currCardRule.validValues.length; i++){
+                        let checkingArr = currCardRule.validValues.at(i);
+                        let currMatches = true;
+                        for(let j = 0; j < checkingArr.length; j++){
+                            if(currPastCardSequence.at(j) !== checkingArr.at(j)){
+                                currMatches = false;
+                                break;
+                            }
+                        }
+                        if(currMatches){
+                            doesValueSequenceMatch = true;
+                        }
+                    }
+                    if(doesValueSequenceMatch){
+                        machineSays.push(currCardRule.actionNeeded)
+                    }
+                }
+            }
+            else if(currType === "suit sequence"){
+                let currPastCardSequence = new Array();
+                let totalNumPastCards = this.pastCards.length;
+                let doesSuitSequenceMatch;
+                if(totalNumPastCards > currCardRule.numberOfValuesToCheck){
+                    for(let i = 0; i < currCardRule.numberOfValuesToCheck; i++){
+                        currPastCardSequence.push(this.pastCards.at(totalNumPastCards - 1 - i).getSuit());
+                    }
+                    for(let i = 0; i < currCardRule.validValues.length; i++){
+                        let checkingArr = currCardRule.validValues.at(i);
+                        let currMatches = true;
+                        for(let j = 0; j < checkingArr.length; j++){
+                            if(currPastCardSequence.at(j) !== checkingArr.at(j)){
+                                currMatches = false;
+                                break;
+                            }
+                        }
+                        if(currMatches){
+                            doesSuitSequenceMatch = true;
+                        }
+                    }
+                    if(doesSuitSequenceMatch){
+                        machineSays.push(currCardRule.actionNeeded);
+                    }
+                }
+            }
+            // console.log(tempCardRule.getGivenSuitOrValue() + ": " + tempCardRule.getActionNeeded());
+            // if(!tempCardRule.cardRuleSatisfied(cardPlayed, actionTaken)){
+            //     cardPenaltyReasons.push("Failure to say \"" + tempCardRule.getActionNeeded() + "\"");
+            //     numberToDraw++;
+            // }
         }
-        console.log(tempCard.getSuit() + " " + tempCard.getValue());
+        // console.log(tempCard.getSuit() + " " + tempCard.getValue());
         if(tempCard.getSuit()===("spades")){
             machineSays.push(tempCard.getValue().toLowerCase() + " of spades");
         }

@@ -14,7 +14,7 @@ function Home(){
     const [lastRemovedCard, setLastRemovedCard] = useAtom(lastRemovedCardState);
     const [playerPlayedCard, setPlayerPlayedCard] = useAtom(playerPlayedCardState);
     const [machineHand, setMachineHand] = useAtom(machineHandState);
-    const initializeGameURL = "https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/";
+    const initializeGameURL = "http://localhost:3001/api/v1/game/";
     const handleClick = async() => {
         await axios.get(initializeGameURL).then((response) => {
             let givenGameID = response.data.gameID;

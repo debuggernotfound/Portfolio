@@ -27,6 +27,7 @@ class Deck{
             this.cards[chosen] = temp;
         }
     }
+    //the root of all my problems XD
     draw(numberToDraw){
         let toReturn;
         let remainingCards = this.numCards - this.currentDrawPosition;
