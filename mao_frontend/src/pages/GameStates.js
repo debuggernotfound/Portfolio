@@ -47,4 +47,10 @@ export const topCardState = atom("four_of_clubs");
 
 export const lastRemovedCardState = atom("");
 
+export const whoWonState = atom("");
+
+// export const urlUsed = atom("http://localhost:3001/api/v1/game/");
+export const urlUsed = atom("https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/");
+
+
 export default GameStates;

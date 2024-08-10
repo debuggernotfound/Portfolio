@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import Hand from "./HandOfCards.js";
 import Card from "./PlayerCard.tsx";
 import TopCard from "./topCard.js";
-import topDeckCard from './topDeckCard.js';
+import topDeckCard from './TopDeckCard.js';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import{
    atom, 
@@ -22,9 +22,9 @@ function Game(){
     let navigate = useNavigate();
     let machineHand = useAtomValue(machineHandState);
     let playerHand = useAtomValue(playerHandState);
-    if(machineHand == 0 || playerHand.length == 0){
-        navigate("/end");
-    }
+    // if(machineHand == 0 || playerHand.length == 0){
+    //     navigate("/end");
+    // }
     return(
         <>
         <div className = "table">

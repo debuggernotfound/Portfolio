@@ -1,9 +1,8 @@
 .deck{
     width:100px;
     height:150px;
-    position:absolute;
-    bottom: 314px;
-    left: 750px;
-    /* background-color: blueviolet; */
+    position:fixed;
+    top: 43%;
+    left: 53%;
     transform-origin: center 150%;
 }

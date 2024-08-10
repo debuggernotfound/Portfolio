@@ -35,16 +35,20 @@
 }
 .chat_display{
     overflow-y:scroll;
-    position:absolute;
+    position:fixed;
     bottom:5%;
     border-radius:20px;
-    right:5%; 
+    right:3%; 
     z-index:1;
     background-color: white;
     width:300px;
     height:200px;
     padding-bottom: 3.5%;
     padding-top:1%;
+}
+.chat_display::-webkit-scrollbar-track{
+    border-radius: 10px;
+    margin-block: 5px;
 }
 .submit_image{
     position:fixed;
@@ -71,7 +75,7 @@
     border-radius: 30px;
     display:flex;
     bottom:5%;
-    right:5%; 
+    right:3%; 
     width:300px;
     height:35px;
     z-index: 1;

@@ -1,5 +1,6 @@
 import Deck from "./deck.js";
 import CardRule from "./card_rules.js";
+import { rules } from "./rules.js";
 class Game {
     constructor(){
         //create id
@@ -8,33 +9,25 @@ class Game {
         this.deck = new Deck(1, true);
         //assign machine and person cards
         this.machineCards = new Map();
-        let machineCardsNumber = 5;
+        let machineCardsNumber = 13;
         let tempMachineArr = this.deck.draw(machineCardsNumber);
         for(let i = 0; i < machineCardsNumber; i++){
             this.machineCards.set(tempMachineArr[i], " ");
         }
+        console.log(this.machineCards);
         this.playerCards = new Map();
-        let tempPlayerArr = this.deck.draw(7);
-        for(let i = 0; i < 7; i++){
+        let playerCardsNumber = 7;
+        let tempPlayerArr = this.deck.draw(playerCardsNumber);
+        for(let i = 0; i < playerCardsNumber; i++){
             this.playerCards.set(tempPlayerArr[i], " ");
-        }       
+        }  
+        // console.log(tempMachineArr);     
         //get top card
         this.topCard = this.deck.draw(1).at(0);
         //initialize past card array
         this.pastCards = new Array();
         //create random card rule set
-        this.totalCardRules=[
-            {"type": "suitOrValue", "isSuit": true, "validKeys": ["diamonds"], "penalty": "Cultural appropriation", "suitOrValueNeeded": true, "actionNeeded": {"ace": "uno", "two": "dos", "three": "tres", "four": "cuatro", "five": "cinco", "six": "seis", "seven": "siete", "eight": "ocho", "nine": "nueve", "ten": "diez", "jack": "once", "queen": "doce", "king": "trece"}},
-            {"type": "suitOrValue", "isSuit": false, "validKeys": ["queen"], "penalty": "Didn't care about the monkey", "suitOrValueNeeded": false, "actionNeeded": "where's the monkey?"},
-            {"type": "suitOrValue", "isSuit": false, "validKeys": ["ace"], "penalty": "Didn't find the monkey", "suitOrValueNeeded": false, "actionNeeded": "there's the monkey!"},
-            {"type": "suitOrValue", "isSuit": false, "validKeys": ["two", "three", "five", "seven", "jack", "king"], "penalty": "Failure to be good at maths", "suitOrValueNeeded": false, "actionNeeded": "prime"}, 
-            {"type": "suitOrValue", "isSuit": false, "validKeys": ["ace", "five", "ten"], "penalty": "Failure to dispense wise sayings", "suitOrValueNeeded": false, "actionNeeded": "rome wasn't built in a day"},
-            {"type": "suitOrValue", "isSuit": false, "validKeys": ["jack"], "penalty": "Failure to be polite", "suitOrValueNeeded": false, "actionNeeded": "knock knock"},
-            {"type": "value sequence", "numberOfValuesToCheck": 2, "validValues": [["jack", "ace"], ["jack", "two"], ["jack", "three"], ["jack", "four"], ["jack", "five"], ["jack", "six"], ["jack", "seven"], ["jack", "eight"], ["jack", "nine"], ["jack", "ten"], ["jack", "queen"], ["jack", "king"]], "penalty": "Failure to open the door to such a gentleman", "actionNeeded": "who's there?"},
-            {"type": "value sequence", "numberOfValuesToCheck": 3, "validValues": [["ace", "ace", "nine"]], "penalty": "Failure to save lives", "actionNeeded": "emergency emergency!"},
-            {"type": "value sequence", "numberOfValuesToCheck": 2, "validValues": [["ace", "seven"], ["seven", "ace"], ["two", "six"], ["six", "two"], ["three", "five"], ["four", "four"]], "penalty": "Failure to do basic arithmetic", "actionNeeded": "maths"},
-            {"type": "suit sequence", "numberOfValuesToCheck": 5, "validValues": [["heart", "heart", "heart", "heart", "heart"]], "penalty": "Failure to introduce the queen in Alice of Wonderland", "actionNeeded": "welcome, queen of hearts"}
-        ]
+        this.totalCardRules= rules;
         let lengthOfCRA = Math.floor(Math.random()*(5)) + 2;
         this.cardRuleArray = new Set();
         for(let i = 0; i < lengthOfCRA; i++){
@@ -73,11 +66,10 @@ class Game {
     }
     processCardPlayed(cardPlayed, isPlayer){
         this.topCard = cardPlayed;
-        this.playersTurn = !this.playersTurn;
         this.pastCards.push(cardPlayed);
-        // if(!(this.topCard.getValue()===("Ace"))){
-        //     this.playersTurn = !this.playersTurn;
-        // }
+        if(!(this.topCard.getValue()===("ace"))){
+            this.playersTurn = !this.playersTurn;
+        }
         if(isPlayer){
             this.playerCards.delete(cardPlayed);
             return true;
@@ -90,14 +82,16 @@ class Game {
     }
     //takes a card object and an array of strings and returns an array that pops out the number of cards that the player will draw, which cards they are, and the reasons why
     determinePenalty(cardPlayed, actionTaken){
+        console.log(actionTaken);
         let cardPenaltyReasons = new Array();
         let numberToDraw = 0; 
         actionTaken = actionTaken.map((action) => (action.toLowerCase()));
         //card put down was incorrect
         if(!this.playersTurn){
-            cardPenaltyReasons.push("Played out of order. It is the machine's turn.");
+            cardPenaltyReasons.push("Out of order. Wait for the machine to play.");
             cardPenaltyReasons.push(this.drawCard(true));
             cardPenaltyReasons.push(1);
+            cardPenaltyReasons.push(this.playersTurn);
             return cardPenaltyReasons;
         }
         if(cardPlayed==="draw"){
@@ -111,6 +105,8 @@ class Game {
                 cardPenaltyReasons.push(this.drawCard(true));
             }
             cardPenaltyReasons.push(numberToDraw + 1);
+            this.playersTurn = !this.playersTurn;
+            cardPenaltyReasons.push(this.playersTurn);
             // console.log("Card penalty reasons: " + cardPenaltyReasons);
             return cardPenaltyReasons;
         }
@@ -118,6 +114,19 @@ class Game {
             cardPenaltyReasons.push("Must play card that is either the same suit or same value as the top card.");
             this.playerCards = this.playerCards.set(this.drawCard(true), " ");
             return cardPenaltyReasons;
+        }
+        //* last card rule
+        if(this.playerCards.size == 2){
+            console.log("in the mao code bracket rn");
+            let action = "mao";
+            let index = actionTaken.indexOf("mao");
+            if(index == -1){
+                cardPenaltyReasons.push("Failure to recognize the chairman");
+                numberToDraw++;
+            }
+            else{
+                actionTaken[index] = "action_processed";
+            }
         }
         //random card rules 
         for(let i = 0; i < this.cardRuleArray.length; i++){
@@ -252,27 +261,17 @@ class Game {
             }
         }
         //* sevens
-        let sevenRule = new CardRule(false, "seven", "have a nice day");
+        let playerPlayedSeven = false;
         if(cardPlayed.getValue()===("seven")){
-            //TODO: ADD CODE TO RETURN THE MACHINE HAND NUMBER TOO
-            this.drawCard(false);
-        }
-        if(!sevenRule.cardRuleSatisfied(cardPlayed, actionTaken)){
-            cardPenaltyReasons.push("Failure to say \"" + sevenRule.getActionNeeded() + "\"");
-            numberToDraw++;
-        }
-        //* last card rule
-        if(this.playerCards.length == 1){
-            let action = "mao";
-            let index = actionTaken.indexOf(action);
-            if(index == -1){
-                cardPenaltyReasons.push("Failure to say \"" + action + "\"");
+            console.log(actionTaken);
+            if(actionTaken.indexOf("have a nice day") == -1){
+                cardPenaltyReasons.push("Failure to be polite");
                 numberToDraw++;
             }
-            else{
-                actionTaken[index] = "action_processed";
-            }
+            playerPlayedSeven = true;
+            this.drawCard(false);
         }
+
         //* all hail rule
         if(cardPlayed.getValue()===("king")){
             let action = "all hail king of " + cardPlayed.getSuit().toLowerCase();
@@ -296,14 +295,18 @@ class Game {
             cardPenaltyReasons.push(this.drawCard(true));
         }
         cardPenaltyReasons.push(numberToDraw);
+        if(playerPlayedSeven){
+            cardPenaltyReasons.unshift(true);
+        }
+        cardPenaltyReasons.push(this.playersTurn);
         return cardPenaltyReasons;
     }
-    drawCard(guaranteeAddToPlayer){
+    drawCard(isAddedToPlayer){
         let tempDrawCard = this.deck.draw(1).at(0);
-        while(this.playerCards.has(tempDrawCard) || this.machineCards.has(tempDrawCard)){
+        while(this.playerCards.has(tempDrawCard) || this.machineCards.has(tempDrawCard) || this.topCard.getImagePathway()===tempDrawCard.getImagePathway()){
             tempDrawCard = this.deck.draw(1).at(0);
         }
-        if(this.playersTurn || guaranteeAddToPlayer){
+        if(isAddedToPlayer){
             this.playerCards.set(tempDrawCard, " ");
         }
         else{
@@ -312,7 +315,7 @@ class Game {
         return tempDrawCard.getImagePathway();
     }
     determineMachineMove(){
-        console.log(this.machineCards);
+        // console.log(this.machineCards);
         let machineSays = new Array();
         let tempCard;
         let tempArr = this.machineCards.keys();
@@ -334,6 +337,7 @@ class Game {
             machineSays.push(this.drawCard(false));
             this.playersTurn=true;
             machineSays.push(false);
+            machineSays.push(this.playersTurn);
             return machineSays;
         }
         // let tempActionTakenArr = new Array();
@@ -429,7 +433,7 @@ class Game {
         if(tempCard.getValue()===("seven")){
             machineSays.push("have a nice day");
         }
-        if(this.machineCards.length == 1){
+        if(this.machineCards.size == 1){
             machineSays.push("mao");
         }
         if(tempCard.getValue()===("king")){
@@ -439,6 +443,7 @@ class Game {
         machineSays.push(tempCard.getImagePathway());
         machineSays.push(tempIndex);
         machineSays.push(true);
+        machineSays.push(this.playersTurn);
         return machineSays;
     }
 

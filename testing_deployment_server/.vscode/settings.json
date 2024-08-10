@@ -2,5 +2,7 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/81f2ec9f-2891-489a-8e57-3a01f953e3fb/resourceGroups/grace/providers/Microsoft.Web/sites/gameofmaobackendLinux",
+    "appService.deploySubpath": "mao_backend"
 }

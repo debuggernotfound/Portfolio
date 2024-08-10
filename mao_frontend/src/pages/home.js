@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import axios from "axios";
 import './home.css';
 import {useNavigate} from 'react-router-dom';
-import { gameIDState, playerHandState, topCardState, chatsInChatBoxState, chatBoxFilledState, lastRemovedCardState, playerPlayedCardState, machineHandState} from './GameStates';
+import { gameIDState, playerHandState, topCardState, chatsInChatBoxState, chatBoxFilledState, lastRemovedCardState, playerPlayedCardState, machineHandState, urlUsed, lastIndexOfActionArrayState} from './GameStates';
 import {useAtom, useAtomValue} from 'jotai';
 function Home(){
     let navigate = useNavigate();
@@ -14,7 +14,8 @@ function Home(){
     const [lastRemovedCard, setLastRemovedCard] = useAtom(lastRemovedCardState);
     const [playerPlayedCard, setPlayerPlayedCard] = useAtom(playerPlayedCardState);
     const [machineHand, setMachineHand] = useAtom(machineHandState);
-    const initializeGameURL = "http://localhost:3001/api/v1/game/";
+    const [lastIndexOfActionArray, setLastIndexOfActionArray] = useAtom(lastIndexOfActionArrayState);
+    const initializeGameURL = useAtomValue(urlUsed);
     const handleClick = async() => {
         await axios.get(initializeGameURL).then((response) => {
             let givenGameID = response.data.gameID;
@@ -28,7 +29,6 @@ function Home(){
         await axios.get(initializeGameURL + "get-top-card").then((response) => {
             let topCardImagePathway = response.data.imagePathway;
             setTopCard(topCardImagePathway);
-            navigate("/game");
         });
         await axios.get(initializeGameURL + "initial-machine-hand-number").then((response) => {
             let initialMachineHandState = [];
@@ -36,18 +36,22 @@ function Home(){
                 initialMachineHandState.push("flipped_card");
             }
             setMachineHand(initialMachineHandState);
+            navigate("/game");
         });
         setChatBoxFilled("");
         setChatsInChatBox(new Array());
         setLastRemovedCard("");
         setPlayerPlayedCard("");
-        
+        setLastIndexOfActionArray(0);
     }
     return(
         <div className="page">
-            <div className = "title">Mao</div>
-            <button className="btn" onClick={() => [handleClick()]}>Play</button>
-            <button className="btn">Rules</button>
+            <div className = "title">MAO</div>
+            <div className = "btn-container">
+                <button className="btn" onClick={() => [handleClick()]}>PLAY</button>
+                <button className="btn">RULES</button>
+                <button className="btn">CREDITS</button>
+            </div>
         </div>
     );
 }
