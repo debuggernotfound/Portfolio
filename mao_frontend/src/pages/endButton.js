@@ -85,6 +85,10 @@ function EndButton(){
             console.log("machine move: " + machineMove);
             let didMachinePlay = machineMove.pop();
             let toSetMachineHandState = [...machineHand];
+            if(machineMove.at(0) === true){
+                machineMove.shift();
+                changedPlayerHand.push(machineMove.shift());
+            }
             if(didMachinePlay){
                 let index = machineMove.pop();
                 console.log("index: " + index);

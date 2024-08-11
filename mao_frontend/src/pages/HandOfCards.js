@@ -82,9 +82,9 @@ function Hand(cards, isMachine){
     );
   }
   function getHandStyle(isMachine){
-    let positioning = isMachine ? 25: 608;  
+    let positioning = isMachine ? 2 : 72;  
     return{
-      'top': `${positioning}px`
+      'top': `${positioning}%`
     }
   }
   function getCardStyle(length, i, isMachineHand, degreeIncrement){

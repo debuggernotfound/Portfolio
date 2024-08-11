@@ -13,7 +13,8 @@ function End(){
         <div className="end-page">
             <div className = "title">{whoWon}</div>
             <div className = "btn-container">
-                <button className="btn" onClick={() => navigate("/")}>Go Home</button>
+                <button className="end-btn" onClick={() => navigate("/")}>Go Home</button>
+                <button className="end-btn" onClick={() => navigate("/")}>New Game</button>
             </div>
             {/* <button className="btn" onClick={() => [initializeServerGame(), navigate("/game")]}>Play</button>
             <button className="btn">Rules</button> */}
