@@ -30,7 +30,8 @@ function Tutorial(){
         "Some of these rules will make you type a specific phrase in the chat (below).",
         "After you're done typing AND played a card, click the \"End Turn\" button (below) to end your turn.",
         "If your messages don't follow the rules, Jerry will give you a one card penalty. Jerry will explain your penalty in this chat",
-        "Jerry knows all the rules, so he's given double the amount of cards that you have. However, winning against Jerry is still tough.",
+        "If you don't have any cards to play, you can click the deck (shown to the left) to draw a card. This will automatically end your turn.",
+        "You don't know any of the rules and Jerry knows all the rules, so he's given double the amount of cards that you have. However, winning against Jerry is still tough.",
         "That's it! Good luck :)"
     ];
     const positionSteps = [
@@ -42,6 +43,7 @@ function Tutorial(){
         {'width':`${20}%`, 'top':`${55}%`, 'left':`${78}%`},
         {'width':`${20}%`, 'top':`${55}%`, 'left':`${2}%`},
         {'width':`${20}%`, 'top':`${50}%`, 'left':`${78}%`},
+        {'width':`${18}%`, 'top':`${35}%`, 'left':`${63}%`},
         {'width':`${20}%`, 'top':`${5}%`, 'left':`${65}%`},
         {'width':`${18}%`, 'top':`${4}%`, 'left':`${2}%`}
     ];
