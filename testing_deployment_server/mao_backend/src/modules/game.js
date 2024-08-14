@@ -24,6 +24,7 @@ class Game {
         // console.log(tempMachineArr);     
         //get top card
         this.topCard = this.deck.draw(1).at(0);
+        console.log(this.topCard);
         //initialize past card array
         this.pastCards = new Array();
         //create random card rule set
@@ -65,17 +66,24 @@ class Game {
         return this.playersTurn;
     }
     processCardPlayed(cardPlayed, isPlayer){
+        console.log(this.topCard);
+        console.log(cardPlayed);
         this.topCard = cardPlayed;
         this.pastCards.push(cardPlayed);
         if(!(this.topCard.getValue()===("ace"))){
             this.playersTurn = !this.playersTurn;
         }
+        else{
+            console.log("ace was played");
+        }
         if(isPlayer){
+            console.log(this.playerCards);
             this.playerCards.delete(cardPlayed);
             return true;
         }
         else{
             this.machineCards.delete(cardPlayed);
+            console.log(this.machineCards);
             return true;
         }
         
@@ -110,15 +118,27 @@ class Game {
             // console.log("Card penalty reasons: " + cardPenaltyReasons);
             return cardPenaltyReasons;
         }
-        if(!this.processCardPlayed(cardPlayed, true)){
-            cardPenaltyReasons.push("Must play card that is either the same suit or same value as the top card.");
-            this.playerCards = this.playerCards.set(this.drawCard(true), " ");
-            return cardPenaltyReasons;
+        //process card played
+        let tempPlayerCardArr = this.playerCards.keys();
+        let keyToProcess = undefined;
+        console.log(cardPlayed.getImagePathway());
+        for(let i = 0; i < this.playerCards.size; i++){
+            keyToProcess = tempPlayerCardArr.next().value;
+            if(cardPlayed.getImagePathway() == keyToProcess){
+                break;
+            }
         }
+        console.log("key to process: " + keyToProcess);
+        this.processCardPlayed(keyToProcess, true);
+        // if(!this.processCardPlayed(cardPlayed, true)){
+        //     cardPenaltyReasons.push("Must play card that is either the same suit or same value as the top card.");
+        //     this.playerCards = this.playerCards.set(this.drawCard(true), " ");
+        //     return cardPenaltyReasons;
+        // }
         //* last card rule
-        if(this.playerCards.size == 2){
+        console.log("this is players cards" + this.playerCards.size);
+        if(this.playerCards.size == 1){
             console.log("in the mao code bracket rn");
-            let action = "mao";
             let index = actionTaken.indexOf("mao");
             if(index == -1){
                 cardPenaltyReasons.push("Failure to recognize the chairman");
@@ -264,9 +284,13 @@ class Game {
         let playerPlayedSeven = false;
         if(cardPlayed.getValue()===("seven")){
             console.log(actionTaken);
-            if(actionTaken.indexOf("have a nice day") == -1){
+            let index = actionTaken.indexOf("have a nice day");
+            if(index == -1){
                 cardPenaltyReasons.push("Failure to be polite");
                 numberToDraw++;
+            }
+            else{
+                actionTaken[index] = "action_processed";
             }
             playerPlayedSeven = true;
             this.drawCard(false);
@@ -322,8 +346,8 @@ class Game {
         let tempIndex;
         console.log("top card: " + this.topCard);
         for(let i = 0; i < this.machineCards.size; i++){
-            tempCard = tempArr.next().value;
             // console.log(tempCard);
+            tempCard = tempArr.next().value;
             if(tempCard.getSuit() === this.topCard.getSuit() || tempCard.getValue() === this.topCard.getValue()){
                 this.processCardPlayed(tempCard, false);
                 // console.log(i);
@@ -432,6 +456,8 @@ class Game {
         }
         if(tempCard.getValue()===("seven")){
             machineSays.push("have a nice day");
+            machineSays.unshift(this.drawCard(true));
+            machineSays.unshift(true);
         }
         if(this.machineCards.size == 1){
             machineSays.push("mao");

@@ -47,10 +47,21 @@ export const topCardState = atom("four_of_clubs");
 
 export const lastRemovedCardState = atom("");
 
+export const machinePlayedCardState = atom("four_of_clubs");
+
 export const whoWonState = atom("");
 
-export const urlUsed = atom("http://localhost:3001/api/v1/game/");
-// export const urlUsed = atom("https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/");
+// export const urlUsed = atom("http://localhost:3001/api/v1/game/");
+export const urlUsed = atom("https://gameofmaobackendlinux.azurewebsites.net/api/v1/game/");
 
+export const tutorialSpeechTextState = atom("Welcome to the tutorial! Click the \"next\" button to begin.");
+
+export const tutorialStepState = atom(-1);
+
+export const speechBubblePositionState = atom({'width':`${20}%`, 'top':`${4}%`, 'left':`${2}%`});
+
+export const speechBubbleButtonState = atom("Next");
+
+export const creditsShownState = atom(false);
 
 export default GameStates;

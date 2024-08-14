@@ -18,7 +18,6 @@ import EndButton from './endButton.js';
 import axios from "axios";
 //import {motion} from "framer-motion";
 function Game(){
-    const queryClient = new QueryClient(); 
     let navigate = useNavigate();
     let machineHand = useAtomValue(machineHandState);
     let playerHand = useAtomValue(playerHandState);

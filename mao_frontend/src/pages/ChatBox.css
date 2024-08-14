@@ -7,6 +7,9 @@
     padding-left: 2%;
     padding-right:15%;
     border-color:black;
+    font-family: "Yusei Magic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     /* border-radius:50px; */
     /* background-color: blueviolet; */
 }
@@ -15,6 +18,9 @@
     color: gray;
     position:relative;
     left:2%;
+    font-family: "Yusei Magic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 .message{
     display:inline-block;
@@ -31,7 +37,9 @@
     align-content: center;
     width:fit-content;
     overflow-wrap: anywhere;
-
+    font-family: "Yusei Magic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 .chat_display{
     overflow-y:auto;

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { chatsInChatBoxState, lastIndexOfActionArrayState, machineHandState, playerHandState, playerPlayedCardState, topCardState, urlUsed, whoWonState} from './GameStates';
+import { chatsInChatBoxState, lastIndexOfActionArrayState, machineHandState, machinePlayedCardState, playerHandState, playerPlayedCardState, topCardState, urlUsed, whoWonState} from './GameStates';
 import './home.css'
 import { useAtom, useAtomValue } from 'jotai';
 
@@ -14,6 +14,7 @@ function EndButton(){
     const [machineHand, setMachineHandState] = useAtom(machineHandState);
     const [topCard, setTopCard] = useAtom(topCardState);
     const [whoWon, setWhoWon] = useAtom(whoWonState);
+    const [machinePlayedCard, setMachinePlayedCard] = useAtom(machinePlayedCardState);
     let navigate = useNavigate();
     let clickNumber = 0;
     let changedChatsArr = [...chatsInChatBox];
@@ -98,7 +99,8 @@ function EndButton(){
                 console.log(toSetMachineHandState);
                 toSetMachineHandState.splice(index, 1);
                 setMachineHandState(toSetMachineHandState);
-                setTopCard(cardMachinePlayed);
+                setMachinePlayedCard(cardMachinePlayed);
+                // setTopCard(cardMachinePlayed);
                 let totalMessages = machineMove.length;
                 console.log(totalMessages);
                 for(let i = 0; i < totalMessages; i++){

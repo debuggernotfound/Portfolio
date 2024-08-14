@@ -5,7 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import {atom, useAtom, useAtomValue} from 'jotai';
 import DrawDeck from './Deck.js';
 import MachineCard from './MachineCard.js';
-import { playerHandState, machineHandState, topCardState, lastRemovedCardState, playerPlayedCardState, chatsInChatBoxState} from './GameStates.js';
+
+import { playerHandState, machineHandState, topCardState, lastRemovedCardState, playerPlayedCardState, chatsInChatBoxState, machinePlayedCardState} from './GameStates.js';
 function Hand(cards, isMachine){
     let degreeIncrement = 0;
     let isMachineHand = isMachine;
@@ -16,6 +17,7 @@ function Hand(cards, isMachine){
     const [lastRemovedCard, setLastRemovedCard] = useAtom(lastRemovedCardState);
     const [playerPlayedCard, setPlayerPlayedCard] = useAtom(playerPlayedCardState);
     const [chatsInChatBox, setChatsInChatBox] = useAtom(chatsInChatBoxState);
+    const [machinePlayedCard, setMachinePlayedCard] = useAtom(machinePlayedCardState);
     const rcaProxy = new Proxy({}, {
       set(obj, property, value){
         let changedArr = [...playerHand];
@@ -48,10 +50,11 @@ function Hand(cards, isMachine){
       // }
       degreeIncrement = (cards.length < 8) ? 15 : 120/cards.length;
       cards = cards.map((s, index) => MachineCard(index, s, getCardStyle(cards.length, index, isMachine, degreeIncrement), getRotation(cards.length, index, degreeIncrement)));
+      hiddenFlippedCardDeck = cards.map((s, index) => DrawDeck(true, getRotation(cards.length, index, degreeIncrement), (index + 50), machinePlayedCard));
     }
     else{
       degreeIncrement = (cards.length < 8) ? 15 : 120/cards.length;
-      hiddenFlippedCardDeck = cards.map((s, index) => DrawDeck(false, getRotation(cards.length, index, degreeIncrement), index*2));
+      hiddenFlippedCardDeck = cards.map((s, index) => DrawDeck(false, getRotation(cards.length, index, degreeIncrement), index*2, "flipped_card.jpg"));
       cards = isMachine ? cards : cards.map((s, index) => PlayerCard(index, s, isMachineHand,getCardStyle(cards.length, index, isMachineHand, degreeIncrement), getRotation(cards.length, index, degreeIncrement), rcaProxy, topCard));
     }  
     //isMachineHand ? machineHand.map((s, index) => Card(false, index, s, isMachineHand, getCardStyle(cards.length, index, isMachineHand, degreeIncrement), getRotation(cards.length, index, degreeIncrement), rcaProxy)) : playerHand.map((s, index) => Card(false, index, s, isMachineHand, getCardStyle(cards.length, index, isMachineHand, degreeIncrement), getRotation(cards.length, index, degreeIncrement), rcaProxy));
@@ -68,6 +71,9 @@ function Hand(cards, isMachine){
         let toSetPlayerPlayedCard = isMachine ? playerPlayedCard : lastRemovedCard;
         setPlayerPlayedCard(toSetPlayerPlayedCard);
       }
+      else{
+        setTopCard(machinePlayedCard);
+      }
     }
     return(
       <motion.div className="hand" style={handStyle}>
@@ -75,8 +81,9 @@ function Hand(cards, isMachine){
         {hiddenFlippedCardDeck}
       </AnimatePresence>
       <AnimatePresence onExitComplete={() => handleExit()}>
-          {cards}
+        {cards}
       </AnimatePresence>
+      
       </motion.div>
 
     );

@@ -16,7 +16,7 @@ class Game {
         }
         console.log(this.machineCards);
         this.playerCards = new Map();
-        let playerCardsNumber = 2;
+        let playerCardsNumber = 7;
         let tempPlayerArr = this.deck.draw(playerCardsNumber);
         for(let i = 0; i < playerCardsNumber; i++){
             this.playerCards.set(tempPlayerArr[i], " ");
@@ -24,6 +24,7 @@ class Game {
         // console.log(tempMachineArr);     
         //get top card
         this.topCard = this.deck.draw(1).at(0);
+        console.log(this.topCard);
         //initialize past card array
         this.pastCards = new Array();
         //create random card rule set
@@ -65,11 +66,15 @@ class Game {
         return this.playersTurn;
     }
     processCardPlayed(cardPlayed, isPlayer){
+        console.log(this.topCard);
         console.log(cardPlayed);
         this.topCard = cardPlayed;
         this.pastCards.push(cardPlayed);
         if(!(this.topCard.getValue()===("ace"))){
             this.playersTurn = !this.playersTurn;
+        }
+        else{
+            console.log("ace was played");
         }
         if(isPlayer){
             console.log(this.playerCards);
@@ -116,12 +121,14 @@ class Game {
         //process card played
         let tempPlayerCardArr = this.playerCards.keys();
         let keyToProcess = undefined;
+        console.log(cardPlayed.getImagePathway());
         for(let i = 0; i < this.playerCards.size; i++){
             keyToProcess = tempPlayerCardArr.next().value;
-            if(cardPlayed.getImagePathway() === keyToProcess){
+            if(cardPlayed.getImagePathway() == keyToProcess){
                 break;
             }
         }
+        console.log("key to process: " + keyToProcess);
         this.processCardPlayed(keyToProcess, true);
         // if(!this.processCardPlayed(cardPlayed, true)){
         //     cardPenaltyReasons.push("Must play card that is either the same suit or same value as the top card.");
@@ -277,9 +284,13 @@ class Game {
         let playerPlayedSeven = false;
         if(cardPlayed.getValue()===("seven")){
             console.log(actionTaken);
-            if(actionTaken.indexOf("have a nice day") == -1){
+            let index = actionTaken.indexOf("have a nice day");
+            if(index == -1){
                 cardPenaltyReasons.push("Failure to be polite");
                 numberToDraw++;
+            }
+            else{
+                actionTaken[index] = "action_processed";
             }
             playerPlayedSeven = true;
             this.drawCard(false);

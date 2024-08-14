@@ -2,8 +2,9 @@ import React, {useEffect} from 'react';
 import axios from "axios";
 import './home.css';
 import {useNavigate} from 'react-router-dom';
-import { gameIDState, playerHandState, topCardState, chatsInChatBoxState, chatBoxFilledState, lastRemovedCardState, playerPlayedCardState, machineHandState, urlUsed, lastIndexOfActionArrayState} from './GameStates';
+import { gameIDState, playerHandState, topCardState, chatsInChatBoxState, chatBoxFilledState, lastRemovedCardState, playerPlayedCardState, machineHandState, urlUsed, lastIndexOfActionArrayState, tutorialStepState, tutorialSpeechTextState, speechBubblePositionState, speechBubbleButtonState, creditsShownState, machinePlayedCardState} from './GameStates';
 import {useAtom, useAtomValue} from 'jotai';
+import Credits from './Credits';
 function Home(){
     let navigate = useNavigate();
     const [gameID, setGameID] = useAtom(gameIDState);
@@ -15,6 +16,12 @@ function Home(){
     const [playerPlayedCard, setPlayerPlayedCard] = useAtom(playerPlayedCardState);
     const [machineHand, setMachineHand] = useAtom(machineHandState);
     const [lastIndexOfActionArray, setLastIndexOfActionArray] = useAtom(lastIndexOfActionArrayState);
+    const [tutorialStep, setTutorialStep] = useAtom(tutorialStepState);
+    const [tutorialSpeechText, setTutorialSpeechText] = useAtom(tutorialSpeechTextState);
+    const [speechBubblePosition, setSpeechBubblePosition] = useAtom(speechBubblePositionState);
+    const [speechBubbleButton, setSpeechBubbleButton] = useAtom(speechBubbleButtonState);
+    const [creditsShown, setCreditsShown] = useAtom(creditsShownState);
+    const [machinePlayedCard, setMachinePlayedCard] = useAtom(machinePlayedCardState);
     const initializeGameURL = useAtomValue(urlUsed);
     const handleClick = async() => {
         await axios.get(initializeGameURL).then((response) => {
@@ -43,15 +50,27 @@ function Home(){
         setLastRemovedCard("");
         setPlayerPlayedCard("");
         setLastIndexOfActionArray(0);
+        setMachinePlayedCard("");
+    }
+    const handleTutorialClick = () => {
+        setTutorialStep(-1);
+        setTutorialSpeechText("Welcome to the tutorial! Click the \"next\" button to begin.");
+        setSpeechBubblePosition({'width':`${20}%`, 'top':`${4}%`, 'left':`${2}%`});
+        setSpeechBubbleButton("Next");
+        navigate("/tutorial")
+    }
+    const handleCreditClick = () => {
+        setCreditsShown(true);
     }
     return(
         <div className="page">
             <div className = "title">MAO</div>
             <div className = "btn-container">
                 <button className="btn" onClick={() => [handleClick()]}>PLAY</button>
-                <button className="btn">RULES</button>
-                <button className="btn">CREDITS</button>
+                <button className="btn" onClick={handleTutorialClick}>RULES</button>
+                <button className="btn" onClick={handleCreditClick}>CREDITS</button>
             </div>
+            {creditsShown ? <Credits/> : null}   
         </div>
     );
 }
